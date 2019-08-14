@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 
+import Header from '../Commons/Header';
+
 import './styles.css';
 
 export default class Login extends Component {
 
     render() {
         return (
-            
             <div id="login-page" class="row">
                 
+                <Header />
                 <div class="col s12 z-depth-6 card-panel">
                     
                     <form class="login-form">

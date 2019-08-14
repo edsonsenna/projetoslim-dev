@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import Header from './pages/Commons/Header/index.js';
-import Login from './pages/Login/index.js';
 import './App.css';
 
+import Routes from './routes.js';
 
-function App() {
-  return (
+
+class App extends Component {
+  render() {
+    return <Routes />;
+  }
+}
+
+export default App;
+
+
+/*
+
+(
     <div>
       <Header></Header>
       <Login></Login>
     </div>
     
     
-  );
-}
-
-export default App;
+  ); */

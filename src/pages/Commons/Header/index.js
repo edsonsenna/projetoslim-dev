@@ -7,9 +7,9 @@ export default class Header extends Component {
 
     render() {
         return (
-            <div class="row s12 header">
-                <div class="img-header">
-                    <img src={logo} alt="Logo" ></img>
+            <div class="header">
+                <div id="img-header">
+                    <img src={logo} alt="Logo" />
                 </div>
             </div>
 
