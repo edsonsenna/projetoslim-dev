@@ -1,21 +1,22 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './pages/Login';
-import Cadastro from './pages/Cadastro';
+import Login from './Components/Login';
+import Cadastro from './Components/Cadastro';
+
 
 const Routes = () => (
 
     <BrowserRouter>
         <Switch>
-            <Route 
+            <Route
                 path="/"
                 exact
-                component={Cadastro}
+                component={Login}
             />
 
             <Route
                 path="/cadastro"
-                component={Login}
+                component={Cadastro}
             />
 
             

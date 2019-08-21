@@ -9,7 +9,7 @@ let mainWindow
 
 function createWindow() {
   mainWindow = new BrowserWindow({ width: 1280, height: 720 })
-  mainWindow.setMenu(null)
+  //mainWindow.setMenu(null)
   mainWindow.loadURL(
     process.env.ELECTRON_START_URL ||
       url.format({
@@ -21,7 +21,8 @@ function createWindow() {
 
   mainWindow.on('closed', () => {
     mainWindow = null
-  })
+  });
+
 }
 
 app.on('ready', createWindow)
