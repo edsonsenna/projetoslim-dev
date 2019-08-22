@@ -20,9 +20,41 @@ class Cadastro extends Component {
         
         var docs = this.props.remotedb.allDocs({include_docs: true});
 
-        this.props.remotedb.changes()
-
+        //this.props.localdb.sync(this.props.remotedb);
         const self = this;
+
+        this.props.localdb.sync(this.props.remotedb, {
+            live:true,
+            retry: true,
+            include_docs: true,
+            back_off_function: function(delay){
+              if (delay === 0) {
+                return 3000;
+              }
+              return delay;
+            },
+            filter: function(doc) {
+              if(doc._deleted) {
+                return false;
+              }
+              return true;
+            }
+          })
+        .on('change', function(info){
+      
+            const clientes = self.props.remotedb.allDocs({include_docs: true});
+            let clients = {};
+      
+            clientes.rows.forEach( n => clients[n.id] = n.doc);
+            
+            self.props.updateClients(clients.reverse());
+      
+      
+        }).on('active',function(info){
+        })
+        .on('complete',function(info){
+          }).on('error', function(err){
+        });
 
         this.props.remotedb.changes({
             since: 'now',
@@ -65,7 +97,7 @@ class Cadastro extends Component {
 
         client.createdAt = new Date();
 
-        const res =  this.props.remotedb.post({ ...client });
+        const res =  this.props.localdb.post({ ...client });
 
         console.log(res);
     }
@@ -84,34 +116,21 @@ class Cadastro extends Component {
 
     render() {
         return(
-            <div className="container">
-                <div id="card-cadastro">
-                   
+            <div className="row">
+                <div className="col s6">
                     <List clientes={this.props.clientes} />
-                    <div className="">
-                        <div className="card">
-                            <div className="card-content">
-                                <p>{ this.props.clients }</p>
-                                <span className="card-title">Controle Catraca</span>
-                                <form className="container" onSubmit={(e) => {
-                                                this.createClient(e,  this.state.client)
-                                            }}>
-                                    <div className = "row">
+                </div>
+                <div className="col s6">
+                    <form onSubmit={(e) => {
+                                    this.createClient(e,  this.state.client)
+                                }}>
 
-                                        <div className="input-field col m6">
-                                            <input id="name" type="text" name="name" onChange={this.updateValue}/>
-                                            <label>Nome do Cliente</label>
-                                        </div>
-                                        <div className="input-field col m6">
-                                            <button className="btn waves-effect waves-light" type="submit" name="action">
-                                            Cadastrar <i className="material-icons right">send</i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                            <label>Nome do Cliente</label>
+                            <input id="name" type="text" name="name" onChange={this.updateValue}/>
+                            <button className="btn waves-effect waves-light" type="submit" name="action">
+                            Cadastrar <i className="material-icons right">send</i>
+                            </button>
+                    </form>
                 </div>
             </div>
         );
