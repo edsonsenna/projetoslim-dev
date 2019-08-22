@@ -84,31 +84,32 @@ class Cadastro extends Component {
 
     render() {
         return(
-            <div id="card-cadastro" className="row">
-                <Header />
-                <SideBar />
-                <List clientes={this.props.clientes} />
-                <div className="col s6">
-                    <div className="card">
-                        <div className="card-content">
-                            <p>{ this.props.clients }</p>
-                            <span className="card-title">Controle Catraca</span>
-                            <form className="container" onSubmit={(e) => {
-                                            this.createClient(e,  this.state.client)
-                                        }}>
-                                <div className = "row">
+            <div className="container">
+                <div id="card-cadastro">
+                   
+                    <List clientes={this.props.clientes} />
+                    <div className="">
+                        <div className="card">
+                            <div className="card-content">
+                                <p>{ this.props.clients }</p>
+                                <span className="card-title">Controle Catraca</span>
+                                <form className="container" onSubmit={(e) => {
+                                                this.createClient(e,  this.state.client)
+                                            }}>
+                                    <div className = "row">
 
-                                <div className="input-field col m6">
-                                    <input id="name" type="text" name="name" onChange={this.updateValue}/>
-                                    <label>Nome do Cliente</label>
-                                </div>
-                                <div className="input-field col m6">
-                                    <button className="btn waves-effect waves-light" type="submit" name="action">
-                                    Cadastrar <i className="material-icons right">send</i>
-                                    </button>
-                                </div>
-                                </div>
-                            </form>
+                                        <div className="input-field col m6">
+                                            <input id="name" type="text" name="name" onChange={this.updateValue}/>
+                                            <label>Nome do Cliente</label>
+                                        </div>
+                                        <div className="input-field col m6">
+                                            <button className="btn waves-effect waves-light" type="submit" name="action">
+                                            Cadastrar <i className="material-icons right">send</i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -128,3 +129,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cadastro);
+
+/// <Header />
+//<SideBar />

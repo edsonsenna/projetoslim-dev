@@ -16,8 +16,11 @@ export default class List extends React.Component {
   renderClientes() {
       //const clients = Object.values(this.props.clients);
 
-      var vals = Object.keys(this.props.clients).map(function(key) {
-        return <div ><h2>{this.props.clients[key].nome}</h2></div>;
+      const self = this.props;
+      console.log(this.props.clientes);
+      console.log(Object.keys(this.props.clientes));
+      var vals = Object.keys(this.props.clientes).map(function(key) {
+        return <div ><h2>{self.clientes[key].name}</h2></div>;
       });
 
       return vals;
@@ -31,7 +34,7 @@ export default class List extends React.Component {
       <div className="col s6">
         <div className="card">
             <div className="card-content">
-                <h1>{this.renderClientes()}</h1>
+              {this.renderClientes()}
             </div>
         </div>
      </div>
