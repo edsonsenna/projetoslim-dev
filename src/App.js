@@ -18,7 +18,7 @@ class App extends Component {
   UNSAFE_componentWillMount() {
 
     var localDB = new PouchDB('clientes-catraca');
-    var remoteDB = new PouchDB('http://admin:adm123@127.0.0.1:5984/clientes-catraca');
+    var remoteDB = new PouchDB('http://134.209.168.27:5984/clientes-catraca');
 
     this.props.setDb(localDB, remoteDB);
 

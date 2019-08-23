@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-//import { useGet } from "react-pouchdb";
+
+
+// import { useGet } from "react-pouchdb";
 
 // import { Container } from './styles';
 
@@ -7,14 +9,14 @@ import React, { Component } from 'react';
 //     {id: "restaurant"}
 // );
 
-export default class List extends React.Component {
+export default class List extends Component {
 
   componentDidMount() {
-    console.log(this.props.clientes);
+    //console.log(this.props.clientes);
   }
 
   renderClientes() {
-    
+
       //const clients = Object.values(this.props.clients);
 
       const self = this.props;
@@ -31,7 +33,7 @@ export default class List extends React.Component {
   render() {
     
     return (
-      <div >
+      <div style={{ height: 500 + 'px', top: -500, overflowX: 'scroll'}}>
           <h3>Lista de Clientes</h3>
           {this.renderClientes()}
      </div>

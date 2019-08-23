@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Header from '../Commons/Header';
-import SideBar from '../Commons/SideBar';
 import List from '../List';
 
 
@@ -17,11 +15,33 @@ class Cadastro extends Component {
     }
 
     componentDidMount() {
-        
-        var docs = this.props.remotedb.allDocs({include_docs: true});
 
-        //this.props.localdb.sync(this.props.remotedb);
         const self = this;
+        
+        this.props.localdb.allDocs({include_docs: true})
+                            .then((res) => {
+
+                                var rows = res.rows;
+
+                                var docs = [];
+
+                                rows.forEach(function(value){
+                                    docs.push(value.doc);
+                                });
+
+                                docs.sort(( a, b ) => {
+                                    if ( a.createdAt < b.createdAt ){
+                                      return -1;
+                                    }
+                                    if ( a.createdAt > b.createdAt ){
+                                      return 1;
+                                    }
+                                    return 0;
+                                });
+
+                                self.props.updateClients(docs);
+
+                            });
 
         this.props.localdb.sync(this.props.remotedb, {
             live:true,
@@ -39,21 +59,41 @@ class Cadastro extends Component {
               }
               return true;
             }
-          })
+        })
         .on('change', function(info){
       
-            const clientes = self.props.remotedb.allDocs({include_docs: true});
-            let clients = {};
-      
-            clientes.rows.forEach( n => clients[n.id] = n.doc);
+            self.props.remotedb.allDocs({include_docs: true})
+                                .then((clientes) => {
+
+                                    var rows = clientes.rows;
+
+                                    var docs = [];
+
+                                    rows.forEach(function(value){
+                                        docs.push(value.doc);
+                                    });
+
+                                    docs.sort(( a, b ) => {
+                                        if ( a.createdAt < b.createdAt ){
+                                          return -1;
+                                        }
+                                        if ( a.createdAt > b.createdAt ){
+                                          return 1;
+                                        }
+                                        return 0;
+                                    });
+
+                                    self.props.updateClients(docs);
+
+                                });
             
-            self.props.updateClients(clients.reverse());
       
       
-        }).on('active',function(info){
         })
-        .on('complete',function(info){
-          }).on('error', function(err){
+        .on('error', function(err){
+
+            console.log(err);
+
         });
 
         this.props.remotedb.changes({
@@ -64,31 +104,35 @@ class Cadastro extends Component {
             style: 'all_docs'
         }).on('change', function(changes){
 
-            console.log(changes);
+            //var response = null;
 
-            var response = null;
+            self.props.remotedb.allDocs({include_docs: true})
+                                .then((clientes) => {
 
-            response = self.props.remotedb.allDocs({
-                    include_docs: true,
-                    attachments: true
-                }, 
-                function(err, res){
-                    if(err) return null;
-                    console.log("Callback => ", res);
-                    let clients = {};
-    
-                    res.rows.forEach( n => clients[n.id] = n.doc);
-                    
-                    self.props.updateClients(clients);
+                                    var rows = clientes.rows;
 
-                    console.log("Self => ", self);
+                                    var docs = [];
 
+                                    rows.forEach(function(value){
+                                        docs.push(value.doc);
+                                    });
 
-                    return res;
-            });
+                                    docs.sort(( a, b ) => {
+                                        if ( a.createdAt < b.createdAt ){
+                                          return -1;
+                                        }
+                                        if ( a.createdAt > b.createdAt ){
+                                          return 1;
+                                        }
+                                        return 0;
+                                    });
+
+                                    self.props.updateClients(docs);
+
+                                });
+
         });
 
-        console.log(this.props);
     }
 
     createClient =  (e, client) => {
@@ -97,14 +141,40 @@ class Cadastro extends Component {
 
         client.createdAt = new Date();
 
-        const res =  this.props.localdb.post({ ...client });
+        const self = this;
+        
+        this.props.localdb.post({ ...client })
+                        .then((res) => { 
 
-        console.log(res);
+                            self.props.localdb.allDocs({include_docs: true})
+                                .then((res) => {
+
+                                    var rows = res.rows;
+
+                                    var docs = [];
+
+                                    rows.forEach(function(value){
+                                        docs.push(value.doc);
+                                    });
+
+                                    docs.sort(( a, b ) => {
+                                        if ( a.createdAt < b.createdAt ){
+                                        return -1;
+                                        }
+                                        if ( a.createdAt > b.createdAt ){
+                                        return 1;
+                                        }
+                                        return 0;
+                                    });
+
+                                    self.props.updateClients(docs);
+
+                                });
+                        });
+
     }
 
     updateValue = (e) => {
-
-        //console.log('Calling', this.props);
 
         const { client } = this.state;
 
@@ -115,6 +185,13 @@ class Cadastro extends Component {
     }
 
     render() {
+
+        const { clientes } = this.props;
+
+        if(!clientes) { 
+            return <h2>Loading...</h2>
+        }
+
         return(
             <div className="row">
                 <div className="col s6">
